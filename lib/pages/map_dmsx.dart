@@ -733,6 +733,76 @@ class _MapdmsxState extends State<Mapdmsx> {
                 ShowText(text: dmsxModels[indexDirection].address),
                 buildImages(dmsxModels[indexDirection].images),
                 Row(
+                  children: [
+                    ShowText(
+                        text:
+                            '${dmsxModels[indexDirection].lat}, ${dmsxModels[indexDirection].lng}'),
+                    WidgetIconButton(
+                      iconData: Icons.edit,
+                      pressFunc: () {
+                        final keyForm = GlobalKey<FormState>();
+
+                        TextEditingController textEditingController =
+                            TextEditingController();
+
+                        MyDialog(context: context).normalDialot(
+                            title: 'Edit Position',
+                            subTitle: 'Edit Lat, Lng',
+                            contentWidget: Form(
+                              key: keyForm,
+                              child: TextFormField(
+                                controller: textEditingController,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'มีช่องว่าง';
+                                  }
+                                  if (!(value.contains(','))) {
+                                    return 'lat และ lng ต้องมี ,';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    errorStyle: TextStyle(
+                                        color: Colors.amber, fontSize: 18),
+                                    filled: true,
+                                    border: InputBorder.none),
+                              ),
+                            ),
+                            firstButton: WidgetTextButton(
+                              label: 'แก้ไข',
+                              pressFunc: () {
+                               
+
+                                if (keyForm.currentState.validate()) {
+
+                                  
+
+                                  List<String> strings =
+                                      textEditingController.text.split(',');
+
+                                  try {
+
+
+                                    double lat =
+                                        double.parse(strings[0].trim());
+                                    double lng =
+                                        double.parse(strings[0].trim());
+
+                                     Get.back();
+
+                                  } catch (e) {
+                                    Get.snackbar(
+                                        'Eror', 'อักษรไม่สามารถทำเป็นจำนวนได้', backgroundColor: Colors.red.shade700, colorText: Colors.white);
+                                  }
+                                }
+                              },
+                            ));
+                      },
+                    ),
+                  ],
+                ),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
@@ -762,61 +832,59 @@ class _MapdmsxState extends State<Mapdmsx> {
                       child: Text('นำทาง'),
                     ),
                     ElevatedButton(
-                      onPressed: 
-                      
-                      () async {
+                      onPressed: () async {
                         var permissionStorage = await Permission.storage.status;
 
-                        if (permissionStorage.isDenied) {
-                          print('##18aug permisionSrot');
+                        // if (permissionStorage.isDenied) {
+                        //   print('##18aug permisionSrot');
 
-                          MyDialog(context: context).normalDialot(
-                              title: 'พื้นที่จัดเก็บปิดใช้งานอยู่',
-                              subTitle: 'กรุณาอนุญาติแอพ',
-                              firstButton: WidgetTextButton(
-                                label: 'ไปอนุญาตแอพ',
-                                pressFunc: () async {
-                                  navigator.pop();
-                                  // openAppSettings();
+                        //   MyDialog(context: context).normalDialot(
+                        //       title: 'พื้นที่จัดเก็บปิดใช้งานอยู่',
+                        //       subTitle: 'กรุณาอนุญาติแอพ',
+                        //       firstButton: WidgetTextButton(
+                        //         label: 'ไปอนุญาตแอพ',
+                        //         pressFunc: () async {
+                        //           navigator.pop();
+                        //           // openAppSettings();
 
-                                  await Permission.storage.request();
+                        //           await Permission.storage.request();
 
-                                },
-                              ));
-                        } else {
-                          double latDou =
-                              double.parse(dmsxModels[indexDirection].lat);
-                          double lngDou =
-                              double.parse(dmsxModels[indexDirection].lng);
+                        //         },
+                        //       ));
+                        // } else {
+                        double latDou =
+                            double.parse(dmsxModels[indexDirection].lat);
+                        double lngDou =
+                            double.parse(dmsxModels[indexDirection].lng);
 
-                          if (appController.positions.isNotEmpty) {
-                            Position position = appController.positions.last;
+                        if (appController.positions.isNotEmpty) {
+                          Position position = appController.positions.last;
 
-                            print(
-                                '##18aug You Click Her latDou = $latDou lngDou = $lngDou');
+                          print(
+                              '##18aug You Click Her latDou = $latDou lngDou = $lngDou');
 
-                            print('##18aug posion= $position');
+                          print('##18aug posion= $position');
 
-                            double distance = AppService().calculateDistance(
-                                position.latitude,
-                                position.longitude,
-                                latDou,
-                                lngDou);
+                          double distance = AppService().calculateDistance(
+                              position.latitude,
+                              position.longitude,
+                              latDou,
+                              lngDou);
 
-                            print('##18aug distance= $distance');
+                          print('##18aug distance= $distance');
 
-                            NumberFormat numberFormat =
-                                NumberFormat('##0.0#', 'en_US');
+                          NumberFormat numberFormat =
+                              NumberFormat('##0.0#', 'en_US');
 
-                            String distanceStr = numberFormat.format(distance);
+                          String distanceStr = numberFormat.format(distance);
 
-                            processTakePhoto(
-                                dmsxmodel: dmsxModels[indexDirection],
-                                source: ImageSource.gallery,
-                                distance: distanceStr,
-                                position: position);
-                          }
+                          processTakePhoto(
+                              dmsxmodel: dmsxModels[indexDirection],
+                              source: ImageSource.gallery,
+                              distance: distanceStr,
+                              position: position);
                         }
+                        // }
                       },
                       child: ShowText(text: 'เลือกรูป'),
                     ),
@@ -1256,12 +1324,16 @@ class _MapdmsxState extends State<Mapdmsx> {
       @required String distance,
       @required Position position}) async {
     try {
-      var re = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png', 'heic'],
-      );
+      print('##14dec processTakePhoto Work');
+      // var re = await FilePicker.platform.pickFiles(
+      //   type: FileType.custom,
+      //   allowedExtensions: ['jpg', 'jpeg', 'png', 'heic'],
+      // );
 
-      File file = File(re.files.single.path);
+      // File file = File(re.files.single.path);
+
+      var result = await ImagePicker().pickImage(source: ImageSource.gallery);
+      File file = File(result.path);
       print('@@dmsx filePath = ${file.path}');
 
       setState(() {});
@@ -1400,8 +1472,8 @@ class _MapdmsxState extends State<Mapdmsx> {
           );
         } else {
           String nameFile = path.basename(file.path);
-          print('##6mar nameFile = $nameFile');
-          print('##6mar nameFile บน servver = ${dmsxmodel.images}');
+          print('##14dec nameFile = $nameFile');
+          print('##14dec nameFile บน servver = ${dmsxmodel.images}');
 
           if (dmsxmodel.images?.isEmpty ?? true) {
             await processUploadAndEdit(file, nameFile, dmsxmodel,
@@ -1446,18 +1518,29 @@ class _MapdmsxState extends State<Mapdmsx> {
   Future<void> processUploadAndEdit(
       File file, String nameFile, Dmsxmodel dmsxmodel,
       {@required Position position, @required String distanceStr}) async {
-    String pathUpload = 'https://pea23.com/apipsinsx/saveImageCustomer.php';
+    String pathUpload = 'https://www.pea23.com/apipsinsx/saveImageCustomer.php';
+    // String pathUpload = 'https://www.androidthai.in.th/fluttertraining/NextHealth/saveFile.php';
+
+    print('##14dec nameFile ---> $nameFile');
 
     Map<String, dynamic> map = {};
     map['file'] =
         await dio.MultipartFile.fromFile(file.path, filename: nameFile);
     dio.FormData data = dio.FormData.fromMap(map);
-    await dio.Dio().post(pathUpload, data: data).then((value) async {
-      print('# === value for upload ==>> $value');
+
+    dio.Dio objDio = dio.Dio();
+    objDio.options.followRedirects = true;
+
+    objDio.options.validateStatus = (status) {
+      print('##14dec status ---> $status');
+    };
+
+    await objDio.post(pathUpload, data: data).then((value) async {
+      print('##14dec === value for upload ==>> $value');
       List<String> images = [];
       var listStatus = <String>[];
 
-      print('@@ statusText === $statusText');
+      print('##14dec statusText === $statusText');
 
       if (dmsxmodel.images.isEmpty) {
         images.add(nameFile);
@@ -1494,12 +1577,8 @@ class _MapdmsxState extends State<Mapdmsx> {
 
       print('@@ listStatus === $listStatus');
 
-
-
-      
-
       String apiEditImages =
-          'https://pea23.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber&latMobile=${position.latitude}&lngMobile=${position.longitude}&distaneMobile=$distanceStr';
+          'https://www.pea23.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber&latMobile=${position.latitude}&lngMobile=${position.longitude}&distaneMobile=$distanceStr';
 
       await dio.Dio().get(apiEditImages).then((value) {
         print('value update == $value');
@@ -1507,6 +1586,8 @@ class _MapdmsxState extends State<Mapdmsx> {
           // takePhotoSpecial();
         });
       });
+    }).catchError((onError) {
+      print('##14dec onError --> $onError');
     });
   }
 

@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/models/user_model.dart';
 import 'package:psinsx/pages/add_information_user.dart';
@@ -63,7 +65,6 @@ class _HomePageState extends State<HomePage> {
     'งดจ่ายไฟ',
     'ประวัติ',
     'หน้าหลัก',
-    
   ];
 
   AppController appController = Get.put(AppController());
@@ -82,6 +83,39 @@ class _HomePageState extends State<HomePage> {
         });
       },
     );
+
+    //สำหรับ ขอPermission Storage
+    Future.delayed(
+      Duration.zero,
+      () {
+        
+        requestManageExternalStoragePermission();
+      },
+    );
+  }
+
+  Future<void> requestManageExternalStoragePermission() async {
+
+    print('##14dec  สำหรับ ขอPermission Storage ------> Work');
+
+    if (Platform.isAndroid) {
+      // ตรวจสอบเวอร์ชัน Android
+      if (await Permission.manageExternalStorage.isGranted) {
+        print("##14dec MANAGE_EXTERNAL_STORAGE permission already granted.");
+      } else {
+        final status = await Permission.manageExternalStorage.request();
+        if (status.isGranted) {
+          print("##14dec MANAGE_EXTERNAL_STORAGE permission granted.");
+        } else if (status.isDenied) {
+          print("##14dec Permission denied.");
+        } else if (status.isPermanentlyDenied) {
+          print("##14dec Permission permanently denied. Redirecting to settings...");
+          await openAppSettings();
+        }
+      }
+    } else {
+      print("##14dec This permission is only available for Android.");
+    }
   }
 
   void cratePages() {
@@ -90,7 +124,9 @@ class _HomePageState extends State<HomePage> {
     }
     //pages.add(online ? MyMap2() : MyMap());
     pages.add(Mapdmsx());
-    pages.add(SearchDmsx(displayBackIcon: false,));
+    pages.add(SearchDmsx(
+      displayBackIcon: false,
+    ));
     pages.add(Dashbord());
   }
 
