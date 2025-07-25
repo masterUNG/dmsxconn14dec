@@ -79,7 +79,7 @@ class MyConstant {
         fontSize: 18,
         fontWeight: FontWeight.w700,
       );
-  TextStyle h3Style({FontWeight fontWeight, Color color}) => TextStyle(
+  TextStyle h3Style({FontWeight? fontWeight, Color? color}) => TextStyle(
         fontSize: 14,
         fontWeight: fontWeight ?? FontWeight.normal,
         color: color,

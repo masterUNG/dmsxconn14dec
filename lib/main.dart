@@ -25,13 +25,13 @@ final Map<String, WidgetBuilder> map = {
 
 ///Applications
 
-String initialRount;
+String? initialRount;
 
 Future<Null> main() async {
   HttpOverrides.global = MyHttpOverride();
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
-  String string = preferences.getString('id');
+  String? string = preferences.getString('id');
 
   if (string?.isEmpty ?? true) {
     initialRount = '/signIn';
@@ -51,11 +51,11 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Prompt',
           brightness: Brightness.dark,
           primaryColor: Color(0xff6a1b9a),
-          accentColor: Color(0xff6a1b9a),
+          // accentColor: Color(0xff6a1b9a),
           textTheme: TextTheme(
-            headline5: TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
-            headline6: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            bodyText2: TextStyle(fontSize: 18),
+            // headline5: TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
+            // headline6: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // bodyText2: TextStyle(fontSize: 18),
           )),
       debugShowCheckedModeBanner: false,
       routes: map,
@@ -65,9 +65,15 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHttpOverride extends HttpOverrides {
+
+
   @override
-  HttpClient createHttpClient(SecurityContext context) {
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
       ..badCertificateCallback = (cert, host, port) => true;
   }
+
+
+
+  
 }

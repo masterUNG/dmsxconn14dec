@@ -20,7 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppService {
   AppController appController = Get.put(AppController());
 
-  Future<void> processChooseMultiImage({BuildContext context}) async {
+  Future<void> processChooseMultiImage({required BuildContext context}) async {
     if (appController.xFiles.isNotEmpty) {
       appController.xFiles.clear();
       appController.nameFiles.clear();
@@ -115,7 +115,7 @@ class AppService {
 
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
-                  String id = preferences.getString('id');
+                  String? id = preferences.getString('id');
 
                   String urlApiInsert =
                       'https://pea23.com/apipsinsx/insertImageJob.php?isAdd=true&image_name=${appController.nameFiles[i]}&user_id=$id';
@@ -132,7 +132,7 @@ class AppService {
     });
   }
 
-  Future<bool> checkNameImage({String nameImage}) async {
+  Future<bool> checkNameImage({required String nameImage}) async {
     String path = 'https://pea23.com/apipsinsx/readAllImageUpload.php';
 
     bool response = false; //ชื่อไม่ซ้ำ ใช้ได้
@@ -164,10 +164,10 @@ class AppService {
   }
 
   Future<String> processUpload(
-      {@required File file,
-      @required String urlAPI,
-      @required String pathImage}) async {
-    String result;
+      {required File file,
+      required String urlAPI,
+      required String pathImage}) async {
+    String? result;
 
     String nameFile = 'image${Random().nextInt(1000000)}.jpg';
     Map<String, dynamic> map = {};
@@ -178,21 +178,21 @@ class AppService {
       result = '$pathImage/$nameFile';
     });
 
-    return result;
+    return result ?? '';
   }
 
-  Future<File> processTakePhoto({@required ImageSource source}) async {
+  Future<File> processTakePhoto({required ImageSource source}) async {
     File file;
     var result = await ImagePicker().pickImage(
       source: source,
       maxWidth: 800,
       maxHeight: 800,
     );
-    file = File(result.path);
+    file = File(result!.path);
     return file;
   }
 
-  Future<void> processFindLocation({@required BuildContext context}) async {
+  Future<void> processFindLocation({required BuildContext context}) async {
     bool locatonServiceEnble = await Geolocator.isLocationServiceEnabled();
     LocationPermission locationPermission;
 
@@ -239,7 +239,7 @@ class AppService {
     }
   }
 
-  void openPermission({@required BuildContext context}) {
+  void openPermission({required BuildContext context}) {
     MyDialog(context: context).normalDialot(
         title: 'Off Permission',
         subTitle: 'Please OpenPermission',
