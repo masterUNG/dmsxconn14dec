@@ -212,17 +212,17 @@ class _AddOutLayState extends State<AddOutLay> {
             'https://www.pea23.com/apipsinsx/addDataOutlay.php?isAdd=true&costType_id=1&supplier_name=$supplierName&supplier_address=$supplierAddress&supplier_taxid=$supplierTaxid&orderFrom_id=1&branch=$branch&user_id=$userId&details=$details&number=$number&priceUnit=$priceUnit&sum=$sum&tax=$tax&referenceNumber=$referenceNumber&image=$urlPathImage&createdAt=$createDate&outlay_status=NO&create_by=$userId&create_date=$createDate';
         await Dio().get(urlInsertData);
         showToast('อัพโหลดสำเร็จ', gravity: Toast.center);
-        routeTuService();
+        // routeTuService();
       });
     } catch (e) {}
   }
 
-  Future<Null> routeTuService() async {
-    MaterialPageRoute route = MaterialPageRoute(
-      builder: (context) => OilPage(),
-    );
-    Navigator.pushAndRemoveUntil(context, route, (route) => false);
-  }
+  // Future<Null> routeTuService() async {
+  //   MaterialPageRoute route = MaterialPageRoute(
+  //     builder: (context) => OilPage(),
+  //   );
+  //   Navigator.pushAndRemoveUntil(context, route, (route) => false);
+  // }
 
   Future<Null> confirmDialog() async {
     showDialog(

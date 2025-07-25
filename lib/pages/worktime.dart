@@ -14,7 +14,7 @@ import 'package:psinsx/widgets/show_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WorkTime extends StatefulWidget {
-  const WorkTime({Key key}) : super(key: key);
+  const WorkTime({Key? key}) : super(key: key);
 
   @override
   _WorkTimeState createState() => _WorkTimeState();
@@ -23,13 +23,13 @@ class WorkTime extends StatefulWidget {
 class _WorkTimeState extends State<WorkTime> {
   final formKey = GlobalKey<FormState>();
   var startWork;
-  File file;
+  File? file;
   var showDate;
   var nameFile;
   var createby;
   var datWork;
 
-  double lat, lng;
+  double? lat, lng;
 
   @override
   void initState() {
@@ -40,12 +40,12 @@ class _WorkTimeState extends State<WorkTime> {
   }
 
   Future<void> findLatLng() async {
-    Position position = await findPosition();
-    lat = position.latitude;
-    lng = position.longitude;
+    Position? position = await findPosition();
+    lat = position!.latitude;
+    lng = position!.longitude;
   }
 
-  Future<Position> findPosition() async {
+  Future<Position?> findPosition() async {
     try {
       return await Geolocator.getCurrentPosition();
     } catch (e) {
@@ -119,7 +119,7 @@ class _WorkTimeState extends State<WorkTime> {
         maxHeight: 800,
       );
       setState(() {
-        file = File(result.path);
+        file = File(result!.path);
       });
     } catch (e) {}
   }
@@ -134,9 +134,12 @@ class _WorkTimeState extends State<WorkTime> {
           child: file == null
               ? IconButton(
                   onPressed: () => processTakePhoto(),
-                  icon: Icon(Icons.add_a_photo,size: 180,),
+                  icon: Icon(
+                    Icons.add_a_photo,
+                    size: 180,
+                  ),
                 )
-              : Image.file(file, fit: BoxFit.cover),
+              : Image.file(file!, fit: BoxFit.cover),
         ),
         // Positioned(
         //   right: 0,
@@ -155,8 +158,12 @@ class _WorkTimeState extends State<WorkTime> {
       label: 'เลขไมค์รถ',
       iconData: Icons.car_rental,
       textInputType: TextInputType.number,
-      funcValidate: startWorkValidate,
-      funcSave: startWorkSave,
+      funcValidate: (p0) {
+        return startWorkValidate(p0!);
+      },
+      funcSave: (p0) {
+        startWorkSave(p0!);
+      },
     );
   }
 
@@ -164,7 +171,7 @@ class _WorkTimeState extends State<WorkTime> {
     startWork = string.trim();
   }
 
-  String startWorkValidate(String string) {
+  String? startWorkValidate(String string) {
     if (string.isEmpty) {
       return 'กรุณาออกให้ครบ';
     } else {
@@ -175,8 +182,8 @@ class _WorkTimeState extends State<WorkTime> {
   ElevatedButton newCheckTime() {
     return ElevatedButton(
       onPressed: () async {
-        if (formKey.currentState.validate()) {
-          formKey.currentState.save();
+        if (formKey.currentState!.validate()) {
+          formKey.currentState!.save();
           //print('@@ startWork ==  $startWork');
 
           if (file == null) {
@@ -184,7 +191,7 @@ class _WorkTimeState extends State<WorkTime> {
           } else {
             Map<String, dynamic> map = {};
             map['file'] =
-                await MultipartFile.fromFile(file.path, filename: nameFile);
+                await MultipartFile.fromFile(file!.path, filename: nameFile);
             FormData formData = FormData.fromMap(map);
 
             var path = 'https://www.pea23.com/saveImage.php';
@@ -201,7 +208,8 @@ class _WorkTimeState extends State<WorkTime> {
                   // print('@@ Success Insert');
 
                   Fluttertoast.showToast(
-                      msg: 'ลงเวลาเข้างานสำเร็จ', toastLength: Toast.LENGTH_LONG);
+                      msg: 'ลงเวลาเข้างานสำเร็จ',
+                      toastLength: Toast.LENGTH_LONG);
                   Navigator.pushNamedAndRemoveUntil(
                       context, '/homePage', (route) => false);
                 } else {

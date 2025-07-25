@@ -14,9 +14,9 @@ class SeachOutlay extends StatefulWidget {
 
 class _SeachOutlayState extends State<SeachOutlay> {
   List<SubModel> subModels = [];
-  List<SubModel> filterSubModels = List();
+  List<SubModel> filterSubModels = [];
 
-  String search;
+  String? search;
   String nodata = 'กรุณากรอกเลขภาษี';
 
   @override

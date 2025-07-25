@@ -20,7 +20,7 @@ class DataLocationModel {
       this.imageInsx,
       this.imgDate});
 
-  DataLocationModel.fromJson(Map<String, dynamic> json, this.idCheck, this.ca, this.peaNo, this.cusName, this.cusTel, this.ptcInsx, this.notiStatus, this.imageInsx, this.imgDate) {
+  DataLocationModel.fromJson(Map<String, dynamic> json) {
     idCheck = json['id_check'];
     ca = json['ca'];
     peaNo = json['pea_no'];

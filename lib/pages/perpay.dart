@@ -35,7 +35,7 @@ class _PerPayState extends State<PerPay> {
     }
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String userId = preferences.getString('id');
+    String? userId = preferences.getString('id');
     print('userId= $userId');
 
     String url =
@@ -78,7 +78,7 @@ class _PerPayState extends State<PerPay> {
           child: ListTile(
             leading: Icon(Icons.money),
             title: Text(
-              perPayModels[index].prepayType,
+              perPayModels[index].prepayType!,
               style: TextStyle(
                 fontSize: 12,
               ),
