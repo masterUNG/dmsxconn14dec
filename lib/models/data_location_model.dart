@@ -1,13 +1,13 @@
 class DataLocationModel {
-  String idCheck;
-  String ca;
-  String peaNo;
-  String cusName;
-  String cusTel;
-  String ptcInsx;
-  String notiStatus;
-  String imageInsx;
-  String imgDate;
+   String? idCheck;
+   String? ca;
+   String? peaNo;
+   String? cusName;
+   String? cusTel;
+   String? ptcInsx;
+   String? notiStatus;
+   String? imageInsx;
+   String? imgDate;
 
   DataLocationModel(
       {this.idCheck,
@@ -20,7 +20,7 @@ class DataLocationModel {
       this.imageInsx,
       this.imgDate});
 
-  DataLocationModel.fromJson(Map<String, dynamic> json) {
+  DataLocationModel.fromJson(Map<String, dynamic> json, this.idCheck, this.ca, this.peaNo, this.cusName, this.cusTel, this.ptcInsx, this.notiStatus, this.imageInsx, this.imgDate) {
     idCheck = json['id_check'];
     ca = json['ca'];
     peaNo = json['pea_no'];

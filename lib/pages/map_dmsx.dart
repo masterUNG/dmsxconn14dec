@@ -47,7 +47,7 @@ class Mapdmsx extends StatefulWidget {
 class _MapdmsxState extends State<Mapdmsx> {
   Completer<GoogleMap> _controller = Completer();
 
-  GoogleMapController mapController;
+  GoogleMapController? mapController;
 
   CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(14.813808171680567, 100.96669116372476),
@@ -59,9 +59,9 @@ class _MapdmsxState extends State<Mapdmsx> {
   Map<MarkerId, Marker> greenMarkers = {};
   Map<MarkerId, Marker> pubpleMarkers = {};
   Map<MarkerId, Marker> showMarkers = {};
-  LatLng startMapLatLng;
+  LatLng? startMapLatLng;
 
-  String statusText;
+  String? statusText;
   List<String> titleStatuss = [];
 
   bool checkAmountImagebol = true; //true show เลือกรูป
@@ -69,14 +69,14 @@ class _MapdmsxState extends State<Mapdmsx> {
   List<Dmsxmodel> dmsxModels = [];
 
   bool showDirction = false; // ไม่แสดงปุ่ม
-  double latDirection, lngDirection;
-  int indexDirection;
+  double? latDirection, lngDirection;
+  int? indexDirection;
 
-  bool haveData; //true == haveData
+  bool? haveData; //true == haveData
 
   int amountGreen = 0;
   int amountPubple = 0;
-  bool greenStatus, pubpleStatus = false;
+  bool? greenStatus, pubpleStatus = false;
 
   var groupNameImages = <String>[];
 
@@ -137,22 +137,22 @@ class _MapdmsxState extends State<Mapdmsx> {
         break;
     }
 
-    MarkerId markerId = MarkerId(dmsxmodel.id);
+    MarkerId markerId = MarkerId(dmsxmodel.id!);
     Marker marker = Marker(
       onTap: () {
         indexDirection = index;
 
-        checkDisplayIconTakePhoto(dmsxmodel: dmsxModels[indexDirection]);
+        checkDisplayIconTakePhoto(dmsxmodel: dmsxModels[indexDirection!]);
 
         print(
-            '##6mar dmsxModel status --> ${dmsxModels[indexDirection].status}');
+            '##6mar dmsxModel status --> ${dmsxModels[indexDirection!].status}');
         print(
-            '###5feb dmsxModel statusText --> ${dmsxModels[indexDirection].statusTxt}');
+            '###5feb dmsxModel statusText --> ${dmsxModels[indexDirection!].statusTxt}');
 
-        latDirection = double.parse(dmsxmodel.lat.trim());
-        lngDirection = double.parse(dmsxmodel.lng.trim());
+        latDirection = double.parse(dmsxmodel.lat!.trim());
+        lngDirection = double.parse(dmsxmodel.lng!.trim());
 
-        if (dmsxModels[indexDirection].image_befor_wmmr.isEmpty) {
+        if (dmsxModels[indexDirection!].image_befor_wmmr!.isEmpty) {
           // takePhotoSpecial();
         }
 
@@ -171,18 +171,18 @@ class _MapdmsxState extends State<Mapdmsx> {
       ),
       markerId: markerId,
       position: LatLng(
-        double.parse(dmsxmodel.lat.trim()),
+        double.parse(dmsxmodel.lat!.trim()),
         double.parse(
-          dmsxmodel.lng.trim(),
+          dmsxmodel.lng!.trim(),
         ),
       ),
     );
 
     markers[markerId] = marker;
-    if (greenStatus) {
+    if (greenStatus!) {
       greenMarkers[markerId] = marker;
     }
-    if (pubpleStatus) {
+    if (pubpleStatus!) {
       pubpleMarkers[markerId] = marker;
     }
   }
@@ -223,7 +223,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                 print(
                     '###1may dmsxmodel.status,  ====>>> ${dmsxmodel.dataStatus} ${dmsxmodel.refnoti_date}');
 
-                String string = dmsxmodel.images;
+                String string = dmsxmodel.images!;
                 if (string.isNotEmpty) {
                   string = string.substring(1, string.length - 1);
 
@@ -268,7 +268,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                   if (map[string] == null) {
                     map[string] = 1.0;
                   } else {
-                    map[string] = map[string] + 1.0;
+                    map[string] = map[string]! + 1.0;
                   }
                 }
 
@@ -312,7 +312,7 @@ class _MapdmsxState extends State<Mapdmsx> {
               mapPrices['WMS2'] = 5.0;
 
               for (var item4 in groupForDigi) {
-                total = total + (map[item4] * mapPrices[item4]);
+                total = total + (map[item4]! * mapPrices[item4]!);
               }
 
               print('##6jul total ==>>> $total');
@@ -352,7 +352,7 @@ class _MapdmsxState extends State<Mapdmsx> {
         });
   }
 
-  Stack showDataMap({@required AppController appController}) {
+  Stack showDataMap({required AppController appController}) {
     return Stack(
       children: [
         buildMap(),
@@ -584,7 +584,7 @@ class _MapdmsxState extends State<Mapdmsx> {
     }
   }
 
-  Column buildDirction({@required AppController appController}) {
+  Column buildDirction({required AppController appController}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -596,16 +596,16 @@ class _MapdmsxState extends State<Mapdmsx> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ShowText(text: 'สาย: ${dmsxModels[indexDirection].line}'),
+                ShowText(text: 'สาย: ${dmsxModels[indexDirection!].line}'),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ShowText(text: 'ca: ${dmsxModels[indexDirection].ca}'),
+                    ShowText(text: 'ca: ${dmsxModels[indexDirection!].ca}'),
                     WidgetIconButton(
                       iconData: Icons.copy,
                       pressFunc: () {
                         Clipboard.setData(
-                            ClipboardData(text: dmsxModels[indexDirection].ca));
+                            ClipboardData(text: dmsxModels[indexDirection!].ca!));
                         print('copy success');
                       },
                     )
@@ -615,16 +615,16 @@ class _MapdmsxState extends State<Mapdmsx> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ShowText(text: 'PEA: ${dmsxModels[indexDirection].peaNo}'),
+                    ShowText(text: 'PEA: ${dmsxModels[indexDirection!].peaNo}'),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ShowText(
                             text:
-                                'ล่าสุด: ${dmsxModels[indexDirection].statusTxt}'),
-                        ((dmsxModels[indexDirection].statusTxt ==
+                                'ล่าสุด: ${dmsxModels[indexDirection!].statusTxt}'),
+                        ((dmsxModels[indexDirection!].statusTxt ==
                                     'ต่อมิเตอร์แล้ว') ||
-                                (dmsxModels[indexDirection].statusTxt ==
+                                (dmsxModels[indexDirection!].statusTxt ==
                                     'ต่อสายแล้ว'))
                             ? WidgetIconButton(
                                 iconData: Icons.qr_code,
@@ -656,9 +656,9 @@ class _MapdmsxState extends State<Mapdmsx> {
                                               if (reactive != null) {
                                                 print('result --> $result');
 
-                                                resultDialog(result,
+                                                resultDialog(result!,
                                                     indexDirection:
-                                                        indexDirection);
+                                                        indexDirection!);
                                               }
                                             }
                                           });
@@ -672,7 +672,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                                         pressFunc: () {
                                           Navigator.pop(context);
 
-                                          String result;
+                                          String? result;
 
                                           MyDialog(context: context)
                                               .normalDialot(
@@ -692,13 +692,13 @@ class _MapdmsxState extends State<Mapdmsx> {
                                                   firstButton: WidgetTextButton(
                                                     label: 'บันทึก',
                                                     pressFunc: () {
-                                                      if (result.isNotEmpty) {
+                                                      if (result!.isNotEmpty) {
                                                         Navigator.pop(context);
                                                         print(
                                                             'reult --> $result');
-                                                        resultDialog(result,
+                                                        resultDialog(result!,
                                                             indexDirection:
-                                                                indexDirection);
+                                                                indexDirection!);
                                                       }
                                                     },
                                                   ));
@@ -719,24 +719,24 @@ class _MapdmsxState extends State<Mapdmsx> {
                     Row(
                       children: [
                         ShowText(text: 'ชื่อ:'),
-                        ShowText(text: dmsxModels[indexDirection].cusName),
+                        ShowText(text: dmsxModels[indexDirection!].cusName!),
                       ],
                     ),
                     ShowTitle(
                       title: MyCalculate().canculateDifferance(
-                          statusDate: dmsxModels[indexDirection].dataStatus,
+                          statusDate: dmsxModels[indexDirection!].dataStatus!,
                           refNotification:
-                              dmsxModels[indexDirection].refnoti_date),
+                              dmsxModels[indexDirection!].refnoti_date!),
                     ),
                   ],
                 ),
-                ShowText(text: dmsxModels[indexDirection].address),
-                buildImages(dmsxModels[indexDirection].images),
+                ShowText(text: dmsxModels[indexDirection!].address!),
+                buildImages(dmsxModels[indexDirection!].images!),
                 Row(
                   children: [
                     ShowText(
                         text:
-                            '${dmsxModels[indexDirection].lat}, ${dmsxModels[indexDirection].lng}'),
+                            '${dmsxModels[indexDirection!].lat}, ${dmsxModels[indexDirection!].lng}'),
                     WidgetIconButton(
                       iconData: Icons.edit,
                       pressFunc: () {
@@ -753,7 +753,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                               child: TextFormField(
                                 controller: textEditingController,
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value!.isEmpty) {
                                     return 'มีช่องว่าง';
                                   }
                                   if (!(value.contains(','))) {
@@ -774,7 +774,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                               pressFunc: () {
                                
 
-                                if (keyForm.currentState.validate()) {
+                                if (keyForm.currentState!.validate()) {
 
                                   
 
@@ -809,7 +809,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                         onPressed: () async {
                           //print('== Tel');
                           final tel =
-                              'tel:${dmsxModels[indexDirection].tel.trim()}';
+                              'tel:${dmsxModels[indexDirection!].tel!.trim()}';
                           if (await canLaunch(tel)) {
                             await launch(tel);
                           } else {
@@ -853,9 +853,9 @@ class _MapdmsxState extends State<Mapdmsx> {
                         //       ));
                         // } else {
                         double latDou =
-                            double.parse(dmsxModels[indexDirection].lat);
+                            double.parse(dmsxModels[indexDirection!].lat!);
                         double lngDou =
-                            double.parse(dmsxModels[indexDirection].lng);
+                            double.parse(dmsxModels[indexDirection!].lng!);
 
                         if (appController.positions.isNotEmpty) {
                           Position position = appController.positions.last;
@@ -879,7 +879,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                           String distanceStr = numberFormat.format(distance);
 
                           processTakePhoto(
-                              dmsxmodel: dmsxModels[indexDirection],
+                              dmsxmodel: dmsxModels[indexDirection!],
                               source: ImageSource.gallery,
                               distance: distanceStr,
                               position: position);
@@ -899,7 +899,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                                   firstButton: WidgetTextButton(
                                     label: 'ถ่ายภาพ',
                                     pressFunc: () async {
-                                      navigator.pop();
+                                      navigator?.pop();
                                       var perCamera =
                                           await Permission.camera.status;
 
@@ -912,7 +912,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                                             firstButton: WidgetTextButton(
                                               label: 'ไปอนุญาตแอพ',
                                               pressFunc: () {
-                                                navigator.pop();
+                                                navigator?.pop();
                                                 openAppSettings();
                                               },
                                             ));
@@ -930,7 +930,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                                           String urlUpload =
                                               'https://pea23.com/apipsinsx/saveFileBeforDmsx.php';
                                           String nameFile =
-                                              '${dmsxModels[indexDirection].ca}_${dmsxModels[indexDirection].dataStatus}.jpg';
+                                              '${dmsxModels[indexDirection!].ca}_${dmsxModels[indexDirection!].dataStatus}.jpg';
                                           Map<String, dynamic> map = {};
                                           map['file'] =
                                               await dio.MultipartFile.fromFile(
@@ -946,7 +946,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                                             print('##29jan --> $urlImage');
 
                                             String urlInsert =
-                                                'https://pea23.com/apipsinsx/insertDataBeforDmsx.php?isAdd=true&ca=${dmsxModels[indexDirection].ca}&pea_on=${dmsxModels[indexDirection].peaNo}&image_name=$urlImage&user_id=${dmsxModels[indexDirection].userId}';
+                                                'https://pea23.com/apipsinsx/insertDataBeforDmsx.php?isAdd=true&ca=${dmsxModels[indexDirection!].ca}&pea_on=${dmsxModels[indexDirection!].peaNo}&image_name=$urlImage&user_id=${dmsxModels[indexDirection!].userId}';
                                             await dio.Dio()
                                                 .get(urlInsert)
                                                 .then((value) {
@@ -954,7 +954,7 @@ class _MapdmsxState extends State<Mapdmsx> {
 
                                               checkDisplayIconTakePhoto(
                                                   dmsxmodel: dmsxModels[
-                                                      indexDirection]);
+                                                      indexDirection!]);
                                             });
                                           });
                                         }
@@ -975,7 +975,7 @@ class _MapdmsxState extends State<Mapdmsx> {
   }
 
   Future<void> resultDialog(String result,
-      {@required int indexDirection}) async {
+      {required int indexDirection}) async {
     String path =
         'https://pea23.com/apipsinsx/getSecurityWhereSerialNo.php?isAdd=true&serial_no=$result';
 
@@ -993,13 +993,13 @@ class _MapdmsxState extends State<Mapdmsx> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              WidgetTextRich(head: 'ca', value: dmsxModels[indexDirection].ca),
+              WidgetTextRich(head: 'ca', value: dmsxModels[indexDirection].ca!),
               WidgetTextRich(
-                  head: 'ใบสั่ง', value: dmsxModels[indexDirection].notice),
+                  head: 'ใบสั่ง', value: dmsxModels[indexDirection].notice!),
               WidgetTextRich(
-                  head: 'pea', value: dmsxModels[indexDirection].peaNo),
+                  head: 'pea', value: dmsxModels[indexDirection].peaNo!),
               WidgetTextRich(
-                  head: 'ชื่อ', value: dmsxModels[indexDirection].cusName),
+                  head: 'ชื่อ', value: dmsxModels[indexDirection].cusName!),
             ],
           ),
           firstButton: WidgetTextButton(
@@ -1033,9 +1033,9 @@ class _MapdmsxState extends State<Mapdmsx> {
 
   void takePhotoSpecial() {
     print(
-        '###5feb statusText after takePhoto --> ${dmsxModels[indexDirection].statusTxt}');
+        '###5feb statusText after takePhoto --> ${dmsxModels[indexDirection!].statusTxt}');
 
-    if (dmsxModels[indexDirection].statusTxt == 'ถอดมิเตอร์แล้ว') {
+    if (dmsxModels[indexDirection!].statusTxt == 'ถอดมิเตอร์แล้ว') {
       MyDialog(context: context).normalDialot(
           title: 'สถานะ : ถอดมิเตอร์แล้ว',
           subTitle:
@@ -1081,7 +1081,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                             print('###5feb urlImage -->> $urlImage');
 
                             String urlApi =
-                                'https://pea23.com/apipsinsx/insertBeforWmnr.php?isAdd=true&docId=${dmsxModels[indexDirection].docID}&ca=${dmsxModels[indexDirection].ca}&pea_on=${dmsxModels[indexDirection].peaNo}&image_name=$urlImage&image_date=${dmsxModels[indexDirection].dataStatus}&user_id=${dmsxModels[indexDirection].userId}';
+                                'https://pea23.com/apipsinsx/insertBeforWmnr.php?isAdd=true&docId=${dmsxModels[indexDirection!].docID}&ca=${dmsxModels[indexDirection!].ca}&pea_on=${dmsxModels[indexDirection!].peaNo}&image_name=$urlImage&image_date=${dmsxModels[indexDirection!].dataStatus}&user_id=${dmsxModels[indexDirection!].userId}';
                             await dio.Dio().get(urlApi).then((value) {
                               readDataApi();
                               Navigator.pop(context);
@@ -1193,8 +1193,8 @@ class _MapdmsxState extends State<Mapdmsx> {
 
         if (!((dmsxmodel.lat == '0') || (dmsxmodel.lng == '0'))) {
           LatLng latlng =
-              LatLng(double.parse(dmsxmodel.lat), double.parse(dmsxmodel.lng));
-          mapController.animateCamera(CameraUpdate.newCameraPosition(
+              LatLng(double.parse(dmsxmodel.lat!), double.parse(dmsxmodel.lng!));
+          mapController!.animateCamera(CameraUpdate.newCameraPosition(
               CameraPosition(target: latlng, zoom: 16)));
         } else {
           Fluttertoast.showToast(msg: 'ไม่พบหมุด');
@@ -1257,7 +1257,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                 'ที่อยู่ : ${dmsxmodel.address}',
                 style: TextStyle(fontSize: 12),
               ),
-              dmsxmodel.images.isEmpty ? SizedBox() : showListImages(dmsxmodel),
+              dmsxmodel.images!.isEmpty ? SizedBox() : showListImages(dmsxmodel),
             ],
           ),
         ),
@@ -1269,8 +1269,9 @@ class _MapdmsxState extends State<Mapdmsx> {
                     processTakePhoto(
                         dmsxmodel: dmsxmodel,
                         source: ImageSource.gallery,
-                        distance: null,
-                        position: null);
+                        // distance: null,
+                        // position: null
+                        );
                   },
                   child: Text('เลือกรูป'),
                 )
@@ -1319,10 +1320,10 @@ class _MapdmsxState extends State<Mapdmsx> {
   bool showUpload = false; // false Non Show Button Upload
 
   Future<void> processTakePhoto(
-      {Dmsxmodel dmsxmodel,
-      ImageSource source,
-      @required String distance,
-      @required Position position}) async {
+      {required Dmsxmodel dmsxmodel,
+      ImageSource? source,
+       String? distance,
+       Position? position}) async {
     try {
       print('##14dec processTakePhoto Work');
       // var re = await FilePicker.platform.pickFiles(
@@ -1333,7 +1334,7 @@ class _MapdmsxState extends State<Mapdmsx> {
       // File file = File(re.files.single.path);
 
       var result = await ImagePicker().pickImage(source: ImageSource.gallery);
-      File file = File(result.path);
+      File file = File(result!.path);
       print('@@dmsx filePath = ${file.path}');
 
       setState(() {});
@@ -1347,7 +1348,7 @@ class _MapdmsxState extends State<Mapdmsx> {
       nameImage = nameImage.substring(0, 4);
       nameImage = converNameImage(nameImage);
 
-      switch (dmsxmodel.statusTxt.trim()) {
+      switch (dmsxmodel.statusTxt!.trim()) {
         case 'เริ่มงดจ่ายไฟ':
           titleStatuss = MyConstant.statusTextsNonJay;
           break;
@@ -1400,7 +1401,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                     style: TextStyle(fontSize: 12, color: Colors.red),
                   ),
                   Text(
-                    'พิกัดเครื่อง: ${position.latitude} ${position.longitude}',
+                    position == null ?  '' : 'พิกัดเครื่อง: ${position.latitude} ${position.longitude}',
                     style: TextStyle(fontSize: 12),
                   ),
                   distance == null
@@ -1427,8 +1428,8 @@ class _MapdmsxState extends State<Mapdmsx> {
             ),
             actions: [
               //showUpload ? buttonUpImage(context, file, dmsxmodel) : SizedBox(),
-              buttonUpImage(context, file, dmsxmodel,
-                  position: position, distanceStr: distance),
+              position == null ?  SizedBox()   : buttonUpImage(context, file, dmsxmodel,
+                  position: position, distanceStr: distance ?? ''),
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('ยกเลิก'),
@@ -1441,7 +1442,7 @@ class _MapdmsxState extends State<Mapdmsx> {
   }
 
   Widget buttonUpImage(BuildContext context, File file, Dmsxmodel dmsxmodel,
-      {@required Position position, @required String distanceStr}) {
+      {required Position position, required String distanceStr}) {
     return TextButton(
       onPressed: () async {
         Navigator.pop(context);
@@ -1455,8 +1456,8 @@ class _MapdmsxState extends State<Mapdmsx> {
 
         print('dmsx code = $code');
 
-        if ((code.trim() != dmsxmodel.ca.trim()) &&
-            (code.trim() != dmsxmodel.peaNo.trim())) {
+        if ((code.trim() != dmsxmodel.ca!.trim()) &&
+            (code.trim() != dmsxmodel.peaNo!.trim())) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -1479,7 +1480,7 @@ class _MapdmsxState extends State<Mapdmsx> {
             await processUploadAndEdit(file, nameFile, dmsxmodel,
                 position: position, distanceStr: distanceStr);
           } else {
-            String string = dmsxmodel.images;
+            String string = dmsxmodel.images!;
             string = string.substring(1, string.length - 1);
             List<String> images = string.split(',');
             int i = 0;
@@ -1517,7 +1518,7 @@ class _MapdmsxState extends State<Mapdmsx> {
 
   Future<void> processUploadAndEdit(
       File file, String nameFile, Dmsxmodel dmsxmodel,
-      {@required Position position, @required String distanceStr}) async {
+      {required Position position, required String distanceStr}) async {
     String pathUpload = 'https://www.pea23.com/apipsinsx/saveImageCustomer.php';
     // String pathUpload = 'https://www.androidthai.in.th/fluttertraining/NextHealth/saveFile.php';
 
@@ -1533,6 +1534,7 @@ class _MapdmsxState extends State<Mapdmsx> {
 
     objDio.options.validateStatus = (status) {
       print('##14dec status ---> $status');
+      return status! < 500; 
     };
 
     await objDio.post(pathUpload, data: data).then((value) async {
@@ -1542,10 +1544,10 @@ class _MapdmsxState extends State<Mapdmsx> {
 
       print('##14dec statusText === $statusText');
 
-      if (dmsxmodel.images.isEmpty) {
+      if (dmsxmodel.images!.isEmpty) {
         images.add(nameFile);
       } else {
-        String string = dmsxmodel.images;
+        String string = dmsxmodel.images!;
         string = string.substring(1, string.length - 1);
         images = string.split(',');
         int index = 0;
@@ -1555,7 +1557,7 @@ class _MapdmsxState extends State<Mapdmsx> {
         }
         images.add(nameFile);
 
-        String statusTextCurrent = dmsxmodel.statusTxt;
+        String statusTextCurrent = dmsxmodel.statusTxt!;
         statusTextCurrent =
             statusTextCurrent.substring(1, statusTextCurrent.length - 1);
         listStatus = statusTextCurrent.split(',');
@@ -1564,12 +1566,12 @@ class _MapdmsxState extends State<Mapdmsx> {
           listStatus[i] = item.trim();
           i++;
         }
-        listStatus.add(statusText);
+        listStatus.add(statusText!);
       }
 
       String readNumber = 'ดำเนินการแล้ว';
 
-      if (dmsxmodel.readNumber.isEmpty) {
+      if (dmsxmodel.readNumber!.isEmpty) {
         readNumber = 'ดำเนินการแล้ว';
       } else {
         readNumber = 'ต่อกลับแล้ว';
@@ -1595,7 +1597,7 @@ class _MapdmsxState extends State<Mapdmsx> {
     print('##### image ==> ${dmsxmodel.images}');
     List<Widget> widgets = [];
 
-    String string = dmsxmodel.images;
+    String string = dmsxmodel.images!;
     string = string.substring(1, string.length - 1);
     List<String> strings = string.split(',');
     print('### strings ==> $strings');
@@ -1639,42 +1641,42 @@ class _MapdmsxState extends State<Mapdmsx> {
     switch (nameImage) {
       case 'ASGD':
         statusText = 'เริ่มงดจ่ายไฟ';
-        return statusText;
+        return statusText!;
         break;
       case 'WMMI':
         statusText = 'ต่อมิเตอร์แล้ว';
-        return statusText;
+        return statusText!;
         break;
       case 'WMMR':
         statusText = 'ถอดมิเตอร์แล้ว';
-        return statusText;
+        return statusText!;
         break;
       case 'FUCN':
         statusText = 'ต่อสายแล้ว';
-        return statusText;
+        return statusText!;
         break;
       case 'FURM':
         statusText = 'ปลดสายแล้ว';
-        return statusText;
+        return statusText!;
         break;
       case 'WMST':
         statusText = 'ผ่อนผันครั้งที่ 1';
-        return statusText;
+        return statusText!;
         break;
       case 'WMS2':
         statusText = 'ผ่อนผันครั้งที่ 2';
-        return statusText;
+        return statusText!;
         break;
       default:
         {
           statusText = 'รูปภาพไม่ถูกต้อง';
-          return statusText;
+          return statusText!;
         }
     }
   }
 
   Future<void> checkDisplayIconTakePhoto(
-      {@required Dmsxmodel dmsxmodel}) async {
+      {required Dmsxmodel dmsxmodel}) async {
     DateTime dateTime = DateTime.now();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd');
     String currentDateTime = dateFormat.format(dateTime);
