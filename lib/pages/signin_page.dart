@@ -89,7 +89,7 @@ class _SignInState extends State<SignIn> {
 
   Future<Null> checkAuthen() async {
     String url =
-        'https://www.pea23.com/apipsinsx/getUserWhereUserSinghto.php?isAdd=true&username=$user';
+        'https://www.dissrecs.com/apipsinsx/getUserWhereUserSinghto.php?isAdd=true&username=$user';
     // ProgressDialog pr = ProgressDialog(context, isDismissible: false);
     // pr.style(
     //     message: 'Loading...',
@@ -140,7 +140,7 @@ class _SignInState extends State<SignIn> {
   Widget _userForm() => Container(
         color: Color(0xffe1bee7),
         width: 250,
-        child: TextFormField(
+        child: TextFormField(style: TextStyle(color: Colors.black),
           onChanged: (value) => user = value.trim(),
           decoration: InputDecoration(
             prefixIcon: Icon(
@@ -157,7 +157,7 @@ class _SignInState extends State<SignIn> {
   Widget _passwordForm() => Container(
         color: Color(0xffe1bee7),
         width: 250,
-        child: TextFormField(
+        child: TextFormField(style: TextStyle(color: Colors.black),
           onChanged: (value) => password = value.trim(),
           obscureText: true,
           decoration: InputDecoration(
