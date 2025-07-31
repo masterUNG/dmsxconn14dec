@@ -205,7 +205,7 @@ class _MapdmsxState extends State<Mapdmsx> {
           dmsxModels.clear();
         }
         String path =
-            'https://dissrecs.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$value';
+            'https://dissrecs.com/apipsinsx/getDmsxWherUser2.php?isAdd=true&user_id=$value';
 
         print('###1feb path ==>>> $path');
 
@@ -352,17 +352,23 @@ class _MapdmsxState extends State<Mapdmsx> {
         });
   }
 
-  Stack showDataMap({required AppController appController}) {
-    return Stack(
-      children: [
-        buildMap(),
-        buildMoney(),
-        buildControl(),
-        buildControlGreen(),
-        buildControlPubple(),
-        buildSearchButton(),
-        showDirction ? buildDirction(appController: appController) : SizedBox(),
-      ],
+  Widget showDataMap({required AppController appController}) {
+    return LayoutBuilder(
+      builder: (context, BoxConstraints constranis) {
+        return SizedBox(width: constranis.maxWidth, height: constranis.maxHeight,
+          child: Stack(fit: StackFit.expand,
+            children: [
+              buildMap(),
+              buildMoney(),
+              buildControl(),
+              buildControlGreen(),
+              buildControlPubple(),
+              buildSearchButton(),
+              showDirction ? buildDirction(appController: appController) : SizedBox(),
+            ],
+          ),
+        );
+      }
     );
   }
 
@@ -1204,7 +1210,7 @@ class _MapdmsxState extends State<Mapdmsx> {
     });
   }
 
-  GoogleMap buildMap() {
+  Widget buildMap() {
     return GoogleMap(
       mapType: MapType.normal,
       initialCameraPosition: _kGooglePlex,

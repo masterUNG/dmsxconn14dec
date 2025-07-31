@@ -75,6 +75,8 @@ class _HomePageState extends State<HomePage> {
     cratePages();
     readUserInfo();
 
+    debugPrint('##31july ');
+
     Future.delayed(
       Duration.zero,
       () {
@@ -138,10 +140,12 @@ class _HomePageState extends State<HomePage> {
     userImge = preferences.getString('user_img');
     userId = preferences.getString('id');
 
+    debugPrint('##31july userImge ---> $userImge');
+
     print('##26oct userId ==>>> $userId');
 
     String urlGetUserWhereId =
-        'https://pea23.com/apipsinsx/getUserWhereId.php?isAdd=true&user_id=$userId';
+        'https://dissrecs.com/apipsinsx/getUserWhereId.php?isAdd=true&user_id=$userId';
     await Dio().get(urlGetUserWhereId).then(
       (value) {
         for (var element in json.decode(value.data)) {
@@ -202,7 +206,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<Null> launchURL() async {
-    final url = 'https://www.pea23.com/index.php';
+    final url = 'https://www.dissrecs.com/index.php';
     await launch(url);
     if (await canLaunch(url)) {
       await launch(url);
